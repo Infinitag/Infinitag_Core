@@ -70,6 +70,42 @@ unsigned long Infinitag_Core::ir_encode(bool isSystem, unsigned int gameId, unsi
 	return finalVal;
 }
 
+
+void Infinitag_Core::ir_to_bytes(unsigned long code, byte *result) {
+	if(code > 16777215) {
+		return false;
+	}
+	
+	int tmpBits[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	int checkBits = 0;
+	
+	for(int i = 0; i < 24;i++){
+		tmpBits[i] =  bitRead(code, 23 - i);
+		if (i < 23 && tmpBits[i] == 1) {
+			checkBits++;
+		}
+	}
+	
+	
+	// Checkbit prüfen
+	if (checkBits % 2 != tmpBits[23]) {
+		return false;
+	}
+	
+	//alternate: r1 | (r2 << 1) | (r3 << 2) | (r4 << 3) | (r5 << 4);
+	char byte_one = (tmpBits[0] << 7) | (tmpBits[1] << 6) | (tmpBits[2] << 5) | (tmpBits[3] << 4) | (tmpBits[4] << 3) | (tmpBits[5] << 2) | (tmpBits[6] << 1) | tmpBits[7];
+	char byte_two = (tmpBits[8] << 7) | (tmpBits[9] << 6) | (tmpBits[10] << 5) | (tmpBits[11] << 4) | (tmpBits[12] << 3) | (tmpBits[13] << 2) | (tmpBits[14] << 1) | tmpBits[15];
+	char byte_three = (tmpBits[16] << 7) | (tmpBits[17] << 6) | (tmpBits[18] << 5) | (tmpBits[19] << 4) | (tmpBits[20] << 3) | (tmpBits[21] << 2) | (tmpBits[22] << 1) | tmpBits[23];
+	
+	byte data[3] = {
+		byte_one,
+		byte_two,
+		byte_three
+	};
+	
+	result = data;
+}
+
 boolean Infinitag_Core::ir_decode(unsigned long code){
 	if(code > 16777215) {
 		return false;
