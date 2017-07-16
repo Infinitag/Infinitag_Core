@@ -1,6 +1,6 @@
 /*
-  Infinitag_Core.h - Library for the Infinitag System.
-  Created by Jani Taxidis & Tobias Stewen, August 22, 2016.
+  Infinitag.cpp - Library for the Infinitag System.
+  Created by Jani Taxidis & Tobias Stewen & Florian Kleene, January 19, 2017.
   Info: www.infinitag.io
 */
 
