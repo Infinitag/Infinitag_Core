@@ -2,6 +2,9 @@
   Infinitag_Core.cpp - Library for the Infinitag System.
   Created by Jani Taxidis & Tobias Stewen, August 22, 2016.
   Info: www.infinitag.io
+
+  All files are published under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+  License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 */
 
 #include "Arduino.h"
