@@ -56,7 +56,7 @@ unsigned long Infinitag_Core::ir_encode(bool isSystem, unsigned int gameId, unsi
 	}
 	
 	// CheckBit
-	// Muss noch errechnet werden
+	// Still needs to be calculated
 	int checkBits = 0;
 	for(int i = 0; i < 23;i++){
 		if (tmpBits[i] == 1) {
@@ -66,7 +66,7 @@ unsigned long Infinitag_Core::ir_encode(bool isSystem, unsigned int gameId, unsi
 	tmpBits[23] = (checkBits % 2);
   
 	for(int i = 0; i < 24;i++){
-		// + 0.49 wegen pow und float
+		// + 0.49 due to pow and float
 		finalVal += round(tmpBits[24 - i - 1] * (pow(2, i) + 0.49));
 	}
   
@@ -90,7 +90,7 @@ void Infinitag_Core::ir_to_bytes(unsigned long code, byte *result) {
 	}
 	
 	
-	// Checkbit prüfen
+	// Checkbit check
 	if (checkBits % 2 != tmpBits[23]) {
 		return false;
 	}
@@ -125,7 +125,7 @@ boolean Infinitag_Core::ir_decode(unsigned long code){
 		}
 	}
    
-   // Checkbit prüfen
+   // Checkbit check
    if (checkBits % 2 != tmpBits[23]) {
 	   return false;
    }
