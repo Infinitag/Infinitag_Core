@@ -1,4 +1,4 @@
-<p><a href="http://www.infinitag.io/"><img src="http://infinitag.io/wp-content/themes/infinitag/img/infinitag.png"></a></p>
+<p><a href="http://www.infinitag.io/"><img src="http://www.infinitag.io/wp-content/themes/infinitag/img/infinitag_w_10mm_rgb.png" height="20px"></a></p>
 
 
 ## Infinitag_Core
