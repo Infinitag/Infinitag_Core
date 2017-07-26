@@ -65,14 +65,19 @@ unsigned long Infinitag_Core::ir_encode(bool isSystem, unsigned int gameId, unsi
 	}
 	tmpBits[23] = (checkBits % 2);
   
-	for(int i = 0; i < 24;i++){
-		// + 0.49 due to pow and float
-		finalVal += round(tmpBits[24 - i - 1] * (pow(2, i) + 0.49));
-	}
-  
-	return finalVal;
+	return bits_to_long(tmpBits);
 }
 
+unsigned long Infinitag_Core::bits_to_long(int *tmpBits) {
+	unsigned long result = 0;
+	
+	for(int i = 0; i < 24;i++){
+		// + 0.49 due to pow and float
+		result += round(tmpBits[24 - i - 1] * (pow(2, i) + 0.49));
+	}
+	
+	return result;
+}
 
 void Infinitag_Core::ir_to_bytes(unsigned long code, byte *result) {
 	if(code > 16777215) {
@@ -99,17 +104,13 @@ void Infinitag_Core::ir_to_bytes(unsigned long code, byte *result) {
 	char byte_one = (tmpBits[0] << 7) | (tmpBits[1] << 6) | (tmpBits[2] << 5) | (tmpBits[3] << 4) | (tmpBits[4] << 3) | (tmpBits[5] << 2) | (tmpBits[6] << 1) | tmpBits[7];
 	char byte_two = (tmpBits[8] << 7) | (tmpBits[9] << 6) | (tmpBits[10] << 5) | (tmpBits[11] << 4) | (tmpBits[12] << 3) | (tmpBits[13] << 2) | (tmpBits[14] << 1) | tmpBits[15];
 	char byte_three = (tmpBits[16] << 7) | (tmpBits[17] << 6) | (tmpBits[18] << 5) | (tmpBits[19] << 4) | (tmpBits[20] << 3) | (tmpBits[21] << 2) | (tmpBits[22] << 1) | tmpBits[23];
-	
-	byte data[3] = {
-		byte_one,
-		byte_two,
-		byte_three
-	};
-	
-	result = data;
+
+	result[0] = byte_one;
+	result[1] = byte_two;
+	result[2] = byte_three;
 }
 
-boolean Infinitag_Core::ir_decode(unsigned long code){
+void Infinitag_Core::ir_decode(unsigned long code){
 	if(code > 16777215) {
 		return false;
 	}
@@ -174,8 +175,22 @@ boolean Infinitag_Core::ir_decode(unsigned long code){
 		bitWrite(x, i, tmpBits[(23 - i)]);
 	}
 	ir_recv_check_bit = x;
-  
-	return true;
+}
+
+void Infinitag_Core::ir_decode(byte *data){
+	int tmpBits[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	
+	for (int i = 0; i < 8; i++) {
+		tmpBits[7 - i] = bitRead(data[1], i);
+	}
+	for (int i = 0; i < 8; i++) {
+		tmpBits[15 - i] = bitRead(data[2], i);
+	}
+	for (int i = 0; i < 8; i++) {
+		tmpBits[23 - i] = bitRead(data[3], i);
+	}
+	
+	ir_decode(bits_to_long(tmpBits));
 }
 
 

@@ -18,8 +18,10 @@
 			Infinitag_Core();
 	
 			unsigned long ir_encode(bool isSystem, unsigned int gameId, unsigned int teamId, unsigned int playerId, unsigned int cmd, unsigned int cmdValue);
-			bool ir_decode(unsigned long code);
+			void ir_decode(unsigned long code);
+			void ir_decode(byte *data);
 			void ir_to_bytes(unsigned long code, byte *result);
+			unsigned long bits_to_long(int *tmpBits);
 			void ir_dump(unsigned long code);
 			
 			unsigned int ir_recv_is_system;
