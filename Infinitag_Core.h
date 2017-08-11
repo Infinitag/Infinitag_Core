@@ -24,6 +24,14 @@
       unsigned long bitsToLong(int *tmpBits);
       void irDump(unsigned long code);
       
+      void sendCmdToSensors(byte data[], unsigned int byteLength);
+      void sendCmdSetGameId(unsigned int gameId);
+      void sendCmdSetTeamId(unsigned int teamId);
+      void sendCmdSetPlayerId(unsigned int playerId);
+      void sendCmdSetSensorId(unsigned int sensorId);
+      void sendCmdSetAnimation(unsigned int animationId, unsigned int duration, unsigned int colorR, unsigned int colorG, unsigned int colorB, unsigned int colorW, unsigned int repeat);
+      void sendCmdPing(unsigned int senderId);
+      
       unsigned int irRecvIsSystem;
       unsigned int irRecvGameId;
       unsigned int irRecvTeamId;

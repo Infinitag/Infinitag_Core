@@ -7,7 +7,9 @@
   License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 */
 
+// Basic Libs
 #include "Arduino.h"
+#include <Wire.h>
 
 // Infinitag
 #include <Infinitag_Core.h>
@@ -202,4 +204,69 @@ void Infinitag_Core::irDump(unsigned long code){
     }
   }
   Serial.println("");
+}
+
+/*
+ * Internal Commands
+ */
+void Infinitag_Core::sendCmdToSensors(byte data[], unsigned int byteLength) {
+  // ToDo: correct destination
+  Wire.beginTransmission(0x22);
+  Wire.write(data, byteLength);
+  Wire.endTransmission();
+}
+
+void Infinitag_Core::sendCmdSetGameId(unsigned int gameId) {
+  byte data[2] = {
+    0x01, 
+    gameId
+  };
+  sendCmdToSensors(data, 2);
+}
+
+void Infinitag_Core::sendCmdSetTeamId(unsigned int teamId) {
+  byte data[2] = {
+    0x02, 
+    teamId
+  };
+  sendCmdToSensors(data, 2);
+}
+
+void Infinitag_Core::sendCmdSetPlayerId(unsigned int playerId) {
+  byte data[2] = {
+    0x03, 
+    playerId
+  };
+  sendCmdToSensors(data, 2);
+}
+
+void Infinitag_Core::sendCmdSetSensorId(unsigned int sensorId) {
+  byte data[2] = {
+    0x04, 
+    sensorId
+  };
+  sendCmdToSensors(data, 2);
+}
+
+void Infinitag_Core::sendCmdSetAnimation(unsigned int animationId, unsigned int duration, unsigned int colorR, unsigned int colorG, unsigned int colorB, unsigned int colorW, unsigned int repeat) {
+  byte data[9] = {
+    0x05, 
+    animationId, 
+    duration, 
+    duration >> 8, 
+    colorR, 
+    colorG, 
+    colorB, 
+    colorW, 
+    repeat
+  };
+  sendCmdToSensors(data, 9);
+}
+
+void Infinitag_Core::sendCmdPing(unsigned int senderId) {
+  byte data[2] = {
+    0x06, 
+    senderId
+  };
+  sendCmdToSensors(data, 2);
 }
