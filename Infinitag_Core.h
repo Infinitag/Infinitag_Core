@@ -31,6 +31,7 @@
       void sendCmdSetSensorId(unsigned int sensorId);
       void sendCmdSetAnimation(unsigned int animationId, unsigned int duration, unsigned int colorR, unsigned int colorG, unsigned int colorB, unsigned int colorW, unsigned int repeat);
       void sendCmdPing(unsigned int senderId);
+      void sendCmdPingSetAlive(bool alive);
       
       unsigned int irRecvIsSystem;
       unsigned int irRecvGameId;

@@ -270,3 +270,11 @@ void Infinitag_Core::sendCmdPing(unsigned int senderId) {
   };
   sendCmdToSensors(data, 2);
 }
+
+void Infinitag_Core::sendCmdPingSetAlive(bool alive) {
+  byte data[2] = {
+    0x07, 
+    (alive) ? 0x01 : 0x00
+  };
+  sendCmdToSensors(data, 2);
+}
