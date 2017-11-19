@@ -240,17 +240,9 @@ void Infinitag_Core::sendCmdSetPlayerId(unsigned int playerId) {
   sendCmdToSensors(data, 2);
 }
 
-void Infinitag_Core::sendCmdSetSensorId(unsigned int sensorId) {
-  byte data[2] = {
-    0x04, 
-    sensorId
-  };
-  sendCmdToSensors(data, 2);
-}
-
 void Infinitag_Core::sendCmdSetAnimation(unsigned int animationId, unsigned int duration, unsigned int colorR, unsigned int colorG, unsigned int colorB, unsigned int colorW, unsigned int repeat) {
   byte data[9] = {
-    0x05, 
+    0x04, 
     animationId, 
     duration, 
     duration >> 8, 
@@ -261,6 +253,14 @@ void Infinitag_Core::sendCmdSetAnimation(unsigned int animationId, unsigned int 
     repeat
   };
   sendCmdToSensors(data, 9);
+}
+
+void Infinitag_Core::sendCmdSetSensorId(unsigned int sensorId) {
+  byte data[2] = {
+    0x05, 
+    sensorId
+  };
+  sendCmdToSensors(data, 2);
 }
 
 void Infinitag_Core::sendCmdPing(unsigned int senderId) {
