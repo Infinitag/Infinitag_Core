@@ -24,6 +24,9 @@
       unsigned long bitsToLong(int *tmpBits);
       void irDump(unsigned long code);
       
+      unsigned long  wifiEncode(bool isSystem, unsigned int gameId, unsigned int teamId, unsigned int playerId, unsigned int cmd, unsigned int cmdValue);
+      
+      
       void sendCmdToSensors(byte data[], unsigned int byteLength);
       void sendCmdSetGameId(unsigned int gameId);
       void sendCmdSetTeamId(unsigned int teamId);

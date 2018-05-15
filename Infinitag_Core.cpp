@@ -207,6 +207,32 @@ void Infinitag_Core::irDump(unsigned long code){
 }
 
 /*
+ * Wifi
+ */
+
+unsigned long Infinitag_Core::wifiEncode(bool isSystem, unsigned int gameId, unsigned int teamId, unsigned int playerId, unsigned int cmd, unsigned int cmdValue){
+  unsigned long result = 0;
+  
+  result = result | isSystem;
+  result = (result << 2) | gameId;
+  result = (result << 3) | teamId;
+  result = (result << 5) | playerId;
+  result = (result << 4) | cmd;
+  result = (result << 8) | cmdValue;
+       
+  int checkBits = 0;
+  for(int i = 0; i < 24;i++){
+    if (bitRead(result, i) == 1) {
+      checkBits++;
+    }
+  }
+  result = (result << 1) | (checkBits % 2);
+  
+  return result;
+}
+
+
+/*
  * Internal Commands
  */
 void Infinitag_Core::sendCmdToSensors(byte data[], unsigned int byteLength) {
