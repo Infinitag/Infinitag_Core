@@ -208,8 +208,10 @@ void Infinitag_Core::irDump(unsigned long code){
 /*
  * Wifi
  * CMD:
- * 1 = Start Game
- * 2 = Confirm Kill
+ * 1 = Start game
+ * 2 = Confirm kill
+ * 3 = Set game time
+ * 4 = Set respawn time
  */
 
 unsigned long Infinitag_Core::wifiEncode(bool isSystem, unsigned int gameId, unsigned int teamId, unsigned int playerId, unsigned int cmd, unsigned int cmdValue){
