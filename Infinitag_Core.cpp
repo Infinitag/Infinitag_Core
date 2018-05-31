@@ -195,7 +195,6 @@ void Infinitag_Core::irDecode(byte *data){
   irDecode(bitsToLong(tmpBits));
 }
 
-
 void Infinitag_Core::irDump(unsigned long code){
   for(int i = 0; i < 24;i++){
     Serial.print(bitRead(code, 23 - i));
@@ -205,6 +204,104 @@ void Infinitag_Core::irDump(unsigned long code){
   }
   Serial.println("");
 }
+
+/*
+ * Wifi
+ * CMD:
+ * 1 = Start game
+ * 2 = Confirm kill
+ * 3 = Set game time
+ * 4 = Set respawn time
+ */
+
+unsigned long Infinitag_Core::wifiEncode(bool isSystem, unsigned int gameId, unsigned int teamId, unsigned int playerId, unsigned int cmd, unsigned int cmdValue){
+  unsigned long result = 0;
+  
+  result = result | isSystem;
+  result = (result << 2) | gameId;
+  result = (result << 3) | teamId;
+  result = (result << 5) | playerId;
+  result = (result << 4) | cmd;
+  result = (result << 8) | cmdValue;
+       
+  int checkBits = 0;
+  for(int i = 0; i < 24;i++){
+    if (bitRead(result, i) == 1) {
+      checkBits++;
+    }
+  }
+  result = (result << 1) | (checkBits % 2);
+  
+  return result;
+}
+
+void Infinitag_Core::wifiDecode(unsigned long  code) {
+  if(code > 16777215) {
+    return false;
+  }
+  
+  int tmpBits[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  byte x;
+  
+  int checkBits = 0;
+  for(int i = 0; i < 24;i++){
+    tmpBits[i] =  bitRead(code, 23 - i);
+    if (i < 23 && tmpBits[i] == 1) {
+      checkBits++;
+    }
+  }
+   
+   // Checkbit check
+   if (checkBits % 2 != tmpBits[23]) {
+     return false;
+   }
+   
+  // System
+  wifiRecvIsSystem = tmpBits[0];
+  
+  // GameId
+  x = 0;
+  for(int i = 0; i < 2;i++){
+    bitWrite(x, i, tmpBits[(2 - i)]);
+  }
+  wifiRecvGameId = x;
+  
+  // TeamId
+  x = 0;
+  for(int i = 0; i < 3;i++){
+    bitWrite(x, i, tmpBits[(5 - i)]);
+  }
+  wifiRecvTeamId = x;
+  
+  // PlayerId
+  x = 0;
+  for(int i = 0; i < 5;i++){
+    bitWrite(x, i, tmpBits[(10 - i)]);
+  }
+  wifiRecvPlayerId = x;
+  
+  // Command
+  x = 0;
+  for(int i = 0; i < 4;i++){
+    bitWrite(x, i, tmpBits[(14 - i)]);
+  }
+  wifiRecvCmd = x;
+  
+  // CommandValue
+  x = 0;
+  for(int i = 0; i < 8;i++){
+    bitWrite(x, i, tmpBits[(22 - i)]);
+  }
+  wifiRecvCmdValue = x;
+  
+  // CheckBit
+  x = 0;
+  for(int i = 0; i < 1;i++){
+    bitWrite(x, i, tmpBits[(23 - i)]);
+  }
+  wifiRecvCheckBit = x;
+}
+
 
 /*
  * Internal Commands
